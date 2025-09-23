@@ -92,7 +92,7 @@ function enhancedSyntaxCheck(email) {
 function advancedDomainValidation(email) {
   const domain = email.split("@")[1]?.toLowerCase();
   if (!domain) return { valid: false, suggestion: null };
-  
+
   // Convert IDN domains to ASCII
   let asciiDomain;
   try {
@@ -103,7 +103,6 @@ function advancedDomainValidation(email) {
 
   // Check for direct typo correction
   if (DOMAIN_CORRECTIONS[domain]) {
-
     return {
       valid: false,
       suggestion: email.replace(domain, DOMAIN_CORRECTIONS[domain]),
@@ -130,17 +129,14 @@ function advancedDomainValidation(email) {
   const isDisposable = DISPOSABLE_DOMAINS.has(domain);
 
   if (bestMatch && bestDistance <= 2) {
-  
-
     return {
-      valid: true,
+      valid: false,
       suggestion: email.replace(domain, bestMatch),
       typo: true,
       confidence: 'high',
       distance: bestDistance
     };
   }
-
 
   return {
     valid: true,
@@ -194,7 +190,6 @@ async function performMxCheck(domain) {
   try {
     // Try MX records first
     const mxRecords = await dns.resolveMx(domain);
-      console.log(mxRecords, "max reoirce===============")
     if (mxRecords && mxRecords.length > 0) {
       const sortedMx = mxRecords.sort((a, b) => a.priority - b.priority);
       return {
@@ -384,7 +379,6 @@ export async function POST(req) {
           };
 
           try {
-           
             // Step 1: Syntax validation
             const syntaxCheck = enhancedSyntaxCheck(normalizedEmail);
             result.syntaxValid = syntaxCheck.valid;

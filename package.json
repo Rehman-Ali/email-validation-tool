@@ -8,12 +8,19 @@
     "start": "next start"
   },
   "dependencies": {
+    "disposable-email": "^0.2.3",
     "dns": "^0.2.2",
+    "email-existence": "^0.1.6",
     "email-validator": "^2.0.4",
     "email-verify": "^0.2.1",
+    "fast-levenshtein": "^3.0.0",
+    "isemail": "^3.2.0",
+    "net": "^1.0.2",
     "next": "15.5.3",
+    "punycode": "^2.3.1",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "tldjs": "^2.3.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
