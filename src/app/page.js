@@ -7,9 +7,9 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [selectedEmail, setSelectedEmail] = useState(null);
   const [options, setOptions] = useState({
-    skipSMTP: false,
+    skipSMTP: true,
     checkDisposable: true,
-    strictValidation: false,
+    strictValidation: true,
     timeout: 12000
   });
 
