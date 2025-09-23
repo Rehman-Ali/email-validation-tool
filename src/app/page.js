@@ -15,22 +15,22 @@ export default function App() {
 
   const validateEmails = async () => {
     if (!emails.trim()) return;
-    
+
     setLoading(true);
     try {
       const res = await fetch("/api/validate-emails", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           emails: emails.split(/[\s,\n]+/).filter(e => e.trim()),
-          options 
+          options
         }),
       });
-      
+
       if (!res.ok) {
         throw new Error(`HTTP ${res.status}: ${await res.text()}`);
       }
-      
+
       const data = await res.json();
       setResults(data);
     } catch (error) {
@@ -52,10 +52,10 @@ export default function App() {
 
   const getConfidenceBadge = (confidence = 0) => {
     const color = confidence >= 80 ? "bg-green-100 text-green-800" :
-                  confidence >= 60 ? "bg-yellow-100 text-yellow-800" :
-                  confidence >= 40 ? "bg-orange-100 text-orange-800" :
-                  "bg-red-100 text-red-800";
-    
+      confidence >= 60 ? "bg-yellow-100 text-yellow-800" :
+        confidence >= 40 ? "bg-orange-100 text-orange-800" :
+          "bg-red-100 text-red-800";
+
     return (
       <span className={`px-2 py-1 rounded-full text-xs font-medium ${color}`}>
         {confidence}%
@@ -71,15 +71,15 @@ export default function App() {
         <div className="bg-white rounded-xl max-w-3xl w-full max-h-[90vh] overflow-auto">
           <div className="p-6 border-b">
             <div className="flex justify-between items-center">
-              <h3 className="text-xl font-bold">Detailed Analysis</h3>
-              <button 
+              <h3 className="text-xl text-black font-bold">Detailed Analysis</h3>
+              <button
                 onClick={() => setSelectedEmail(null)}
                 className="text-gray-500 hover:text-gray-700 text-2xl"
               >
                 ×
               </button>
             </div>
-            <p className="text-lg font-mono mt-2 break-all">{result.email}</p>
+            <p className="text-lg text-black font-mono mt-2 break-all">{result.email}</p>
             <div className="flex items-center gap-2 mt-2">
               <span className={`font-medium ${result.valid ? 'text-green-700' : 'text-red-700'}`}>
                 {result.valid ? '✅ Valid' : '❌ Invalid'}
@@ -91,12 +91,12 @@ export default function App() {
           <div className="p-6 space-y-6">
             {/* Validation Steps */}
             <div>
-              <h4 className="font-semibold mb-3">Validation Steps</h4>
+              <h4 className="font-semibold text-black mb-3">Validation Steps</h4>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className={`p-3 rounded-lg border ${result.syntaxValid ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
                   <div className="flex items-center gap-2">
                     <span>{result.syntaxValid ? '✅' : '❌'}</span>
-                    <span className="font-medium">Syntax</span>
+                    <span className="font-medium text-black ">Syntax</span>
                   </div>
                   <p className="text-sm text-gray-600 mt-1">Email format check</p>
                 </div>
@@ -104,28 +104,27 @@ export default function App() {
                 <div className={`p-3 rounded-lg border ${result.domainValid ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
                   <div className="flex items-center gap-2">
                     <span>{result.domainValid ? '✅' : '❌'}</span>
-                    <span className="font-medium">Domain</span>
+                    <span className="font-medium text-black">Domain</span>
                   </div>
-                  <p className="text-sm text-gray-600 mt-1">Domain validity</p>
+                  <p className="text-sm text-gray-600 mt-1 text-black">Domain validity</p>
                 </div>
 
                 <div className={`p-3 rounded-lg border ${result.mxValid ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
                   <div className="flex items-center gap-2">
                     <span>{result.mxValid ? '✅' : '❌'}</span>
-                    <span className="font-medium">MX Records</span>
+                    <span className="font-medium text-black">MX Records</span>
                   </div>
-                  <p className="text-sm text-gray-600 mt-1">Mail server check</p>
+                  <p className="text-sm text-gray-600 mt-1 ">Mail server check</p>
                 </div>
 
-                <div className={`p-3 rounded-lg border ${
-                  result.smtpValid === null ? 'bg-gray-50 border-gray-200' :
+                <div className={`p-3 rounded-lg border ${result.smtpValid === null ? 'bg-gray-50 border-gray-200' :
                   result.smtpValid ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'
-                }`}>
+                  }`}>
                   <div className="flex items-center gap-2">
                     <span>
                       {result.smtpValid === null ? '⏸️' : result.smtpValid ? '✅' : '❌'}
                     </span>
-                    <span className="font-medium">SMTP</span>
+                    <span className="font-medium text-black">SMTP</span>
                   </div>
                   <p className="text-sm text-gray-600 mt-1">
                     {result.smtpValid === null ? 'Skipped' : 'Delivery check'}
@@ -135,9 +134,9 @@ export default function App() {
             </div>
 
             {/* Suggestions */}
-            {result.suggestions && result.suggestions.length > 0 && (
+            {/* {result.suggestions && result.suggestions.length > 0 && (
               <div>
-                <h4 className="font-semibold mb-3">💡 Suggestions</h4>
+                <h4 className="font-semibold text-black mb-3">💡 Suggestions</h4>
                 <div className="space-y-2">
                   {result.suggestions.map((suggestion, idx) => (
                     <div key={idx} className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
@@ -152,10 +151,10 @@ export default function App() {
                   ))}
                 </div>
               </div>
-            )}
+            )} */}
 
             {/* Flags */}
-            {result.flags && result.flags.length > 0 && (
+            {/* {result.flags && result.flags.length > 0 && (
               <div>
                 <h4 className="font-semibold mb-3">⚠️ Flags</h4>
                 <div className="flex flex-wrap gap-2">
@@ -166,19 +165,19 @@ export default function App() {
                   ))}
                 </div>
               </div>
-            )}
+            )} */}
 
             {/* Technical Details */}
             {result.details && (
               <div>
-                <h4 className="font-semibold mb-3">🔧 Technical Details</h4>
+                <h4 className="font-semibold text-black mb-3">🔧 Technical Details</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* MX Records */}
                   {result.details.mx?.records && (
                     <div className="p-4 bg-gray-50 rounded-lg">
-                      <h5 className="font-medium mb-2">Mail Servers</h5>
+                      <h5 className="font-medium mb-2 text-black">Mail Servers</h5>
                       <div className="space-y-1 text-sm">
-                        {Array.isArray(result.details.mx.records) ? 
+                        {Array.isArray(result.details.mx.records) ?
                           result.details.mx.records.slice(0, 3).map((record, idx) => (
                             <div key={idx} className="font-mono text-gray-700">
                               {typeof record === 'object' ? `${record.exchange} (${record.priority})` : record}
@@ -193,8 +192,8 @@ export default function App() {
                   {/* SMTP Details */}
                   {result.details.smtp && (
                     <div className="p-4 bg-gray-50 rounded-lg">
-                      <h5 className="font-medium mb-2">SMTP Check</h5>
-                      <div className="text-sm">
+                      <h5 className="font-medium mb-2 text-black">SMTP Check</h5>
+                      <div className="text-sm text-black">
                         <p><strong>Status:</strong> {result.details.smtp.details || 'No details'}</p>
                         {result.details.smtp.confidence && (
                           <p><strong>Confidence:</strong> {result.details.smtp.confidence}%</p>
@@ -213,42 +212,42 @@ export default function App() {
 
   return (
     <div className="max-w-6xl mx-auto p-6 bg-white shadow rounded-xl">
-      <h1 className="text-3xl font-bold mb-6 text-center">Advanced Email Validation Tool</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center text-black">Advanced Email Validation Tool</h1>
 
       {/* Options Panel */}
       <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-        <h3 className="font-semibold mb-3">⚙️ Validation Options</h3>
+        <h3 className="font-semibold mb-3 text-black">⚙️ Validation Options</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <label className="flex items-center gap-2">
-            <input 
-              type="checkbox" 
+            <input
+              type="checkbox"
               checked={options.skipSMTP}
-              onChange={(e) => setOptions({...options, skipSMTP: e.target.checked})}
+              onChange={(e) => setOptions({ ...options, skipSMTP: e.target.checked })}
             />
-            <span className="text-sm">Skip SMTP (Faster)</span>
+            <span className="text-sm text-black">Skip SMTP (Faster)</span>
           </label>
           <label className="flex items-center gap-2">
-            <input 
-              type="checkbox" 
+            <input
+              type="checkbox"
               checked={options.checkDisposable}
-              onChange={(e) => setOptions({...options, checkDisposable: e.target.checked})}
+              onChange={(e) => setOptions({ ...options, checkDisposable: e.target.checked })}
             />
-            <span className="text-sm">Check Disposable</span>
+            <span className="text-sm text-black">Check Disposable</span>
           </label>
           <label className="flex items-center gap-2">
-            <input 
-              type="checkbox" 
+            <input
+              type="checkbox"
               checked={options.strictValidation}
-              onChange={(e) => setOptions({...options, strictValidation: e.target.checked})}
+              onChange={(e) => setOptions({ ...options, strictValidation: e.target.checked })}
             />
-            <span className="text-sm">Strict Mode</span>
+            <span className="text-sm text-black">Strict Mode</span>
           </label>
           <div className="flex items-center gap-2">
-            <label className="text-sm">Timeout:</label>
-            <select 
+            <label className="text-sm text-black">Timeout:</label>
+            <select
               value={options.timeout}
-              onChange={(e) => setOptions({...options, timeout: parseInt(e.target.value)})}
-              className="border rounded px-2 py-1 text-sm"
+              onChange={(e) => setOptions({ ...options, timeout: parseInt(e.target.value) })}
+              className="border text-black rounded px-2 py-1 text-sm"
             >
               <option value={5000}>5s</option>
               <option value={10000}>10s</option>
@@ -259,7 +258,7 @@ export default function App() {
       </div>
 
       <textarea
-        className="w-full p-4 border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        className="w-full p-4 border-2 text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         rows={6}
         placeholder="Paste your emails separated by comma, space, or new lines&#10;Example:&#10;user@gmail.com&#10;test@example.com&#10;invalid-email@nonexistent.com"
         value={emails}
@@ -273,7 +272,7 @@ export default function App() {
       >
         {loading ? (
           <div className="flex items-center justify-center gap-2">
-            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-4 h-4 border-2 text-white border-white border-t-transparent rounded-full animate-spin"></div>
             Validating Emails...
           </div>
         ) : (
@@ -286,7 +285,7 @@ export default function App() {
         <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
           <div className="flex items-center gap-2 text-red-800">
             <span className="text-xl">❌</span>
-            <span className="font-medium">Validation Error</span>
+            <span className="font-medium text-black">Validation Error</span>
           </div>
           <p className="text-red-700 mt-1">{results.error}</p>
         </div>
@@ -298,7 +297,7 @@ export default function App() {
           {/* Summary */}
           {results.summary && (
             <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <h3 className="font-semibold mb-2">📊 Validation Summary</h3>
+              <h3 className="font-semibold mb-2 text-black">📊 Validation Summary</h3>
               <div className="grid grid-cols-3 md:grid-cols-6 gap-4 text-sm">
                 <div className="text-center">
                   <div className="font-bold text-lg text-blue-600">{results.summary.total}</div>
@@ -330,40 +329,40 @@ export default function App() {
 
           {/* Results Table */}
           <div className="overflow-x-auto">
-            <h2 className="text-xl font-semibold mb-4">Validation Results</h2>
+            <h2 className="text-xl font-semibold mb-4 text-black">Validation Results</h2>
             <table className="w-full border-collapse border border-gray-200 rounded-lg overflow-hidden">
               <thead>
                 <tr className="bg-gray-100">
-                  <th className="border border-gray-200 p-3 text-left">Email</th>
-                  <th className="border border-gray-200 p-3 text-center">Status</th>
-                  <th className="border border-gray-200 p-3 text-center">Confidence</th>
-                  <th className="border border-gray-200 p-3 text-center">Syntax</th>
-                  <th className="border border-gray-200 p-3 text-center">Domain</th>
-                  <th className="border border-gray-200 p-3 text-center">MX</th>
-                  <th className="border border-gray-200 p-3 text-center">SMTP</th>
-                  <th className="border border-gray-200 p-3 text-center">Details</th>
+                  <th className="border border-gray-200 p-3 text-left text-black">Email</th>
+                  <th className="border border-gray-200 p-3 text-center text-black">Status</th>
+                  <th className="border border-gray-200 p-3 text-center text-black">Confidence</th>
+                  <th className="border border-gray-200 p-3 text-center text-black">Syntax</th>
+                  <th className="border border-gray-200 p-3 text-center text-black">Domain</th>
+                  <th className="border border-gray-200 p-3 text-center text-black">MX</th>
+                  <th className="border border-gray-200 p-3 text-center text-black">SMTP</th>
+                  <th className="border border-gray-200 p-3 text-center text-black">Details</th>
                 </tr>
               </thead>
               <tbody>
                 {results.results.map((result, index) => (
                   <tr key={index} className="hover:bg-gray-50">
                     <td className="border border-gray-200 p-3">
-                      <div className="font-mono text-sm break-all">{result.email}</div>
+                      <div className="font-mono text-sm break-all text-black">{result.email}</div>
                       {/* Suggestions indicator */}
-                      {result.suggestions && result.suggestions.length > 0 && (
+                      {/* {result.suggestions && result.suggestions.length > 0 && (
                         <div className="text-xs text-yellow-600 mt-1">💡 Has suggestions</div>
-                      )}
+                      )} */}
                       {/* Flags indicator */}
-                      {result.flags && result.flags.length > 0 && (
+                      {/* {result.flags && result.flags.length > 0 && (
                         <div className="text-xs text-orange-600 mt-1">⚠️ Has flags</div>
-                      )}
+                      )} */}
                     </td>
-                    <td className="border border-gray-200 p-3 text-center">
+                    <td className="border border-gray-200 p-3 text-black text-center">
                       <span className={`font-medium ${getStatusColor(result.valid, result.confidence)}`}>
                         {result.valid ? '✅ Valid' : '❌ Invalid'}
                       </span>
                     </td>
-                    <td className="border border-gray-200 p-3 text-center">
+                    <td className="border border-gray-200 p-3 text-center text-black">
                       {getConfidenceBadge(result.confidence)}
                     </td>
                     <td className={`border border-gray-200 p-3 text-center ${result.syntaxValid ? "text-green-600" : "text-red-600"}`}>
@@ -375,10 +374,9 @@ export default function App() {
                     <td className={`border border-gray-200 p-3 text-center ${result.mxValid ? "text-green-600" : "text-red-600"}`}>
                       {result.mxValid ? "✅" : "❌"}
                     </td>
-                    <td className={`border border-gray-200 p-3 text-center ${
-                      result.smtpValid === null ? "text-gray-500" :
+                    <td className={`border border-gray-200 p-3 text-center ${result.smtpValid === null ? "text-gray-500" :
                       result.smtpValid ? "text-green-600" : "text-red-600"
-                    }`}>
+                      }`}>
                       {result.smtpValid === null ? "⏸️" : result.smtpValid ? "✅" : "❌"}
                     </td>
                     <td className="border border-gray-200 p-3 text-center">
