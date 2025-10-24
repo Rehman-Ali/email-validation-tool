@@ -6,51 +6,12 @@ export default function App() {
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedEmail, setSelectedEmail] = useState(null);
-  const [csvHeaders, setCsvHeaders] = useState([]);
-  const [csvData, setCsvData] = useState([]);
-  const [showColumnSelector, setShowColumnSelector] = useState(false);
   const [options, setOptions] = useState({
     skipSMTP: true,
     checkDisposable: true,
     strictValidation: true,
     timeout: 12000
   });
-
-  const handleFileUpload = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const text = await file.text();
-    
-    // Parse CSV manually (simple parser)
-    const lines = text.split('\n').filter(line => line.trim());
-    if (lines.length === 0) return;
-
-    const headers = lines[0].split(',').map(h => h.trim().replace(/^["']|["']$/g, ''));
-    const rows = lines.slice(1).map(line => {
-      const values = line.split(',').map(v => v.trim().replace(/^["']|["']$/g, ''));
-      return headers.reduce((obj, header, index) => {
-        obj[header] = values[index] || '';
-        return obj;
-      }, {});
-    });
-
-    setCsvHeaders(headers);
-    setCsvData(rows);
-    setShowColumnSelector(true);
-  };
-
-  const handleColumnSelect = (columnName) => {
-    const emailsFromCsv = csvData
-      .map(row => row[columnName])
-      .filter(email => email && email.trim())
-      .join('\n');
-    
-    setEmails(emailsFromCsv);
-    setShowColumnSelector(false);
-    setCsvHeaders([]);
-    setCsvData([]);
-  };
 
   const validateEmails = async () => {
     if (!emails.trim()) return;
@@ -172,6 +133,40 @@ export default function App() {
               </div>
             </div>
 
+            {/* Suggestions */}
+            {/* {result.suggestions && result.suggestions.length > 0 && (
+              <div>
+                <h4 className="font-semibold text-black mb-3">💡 Suggestions</h4>
+                <div className="space-y-2">
+                  {result.suggestions.map((suggestion, idx) => (
+                    <div key={idx} className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                      <p className="font-medium text-yellow-800">Possible Typo Detected</p>
+                      <p className="text-yellow-700">
+                        Did you mean: <span className="font-mono bg-yellow-100 px-1 rounded">{suggestion.suggestion}</span>
+                      </p>
+                      {suggestion.confidence && (
+                        <p className="text-sm text-yellow-600">Confidence: {suggestion.confidence}</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )} */}
+
+            {/* Flags */}
+            {/* {result.flags && result.flags.length > 0 && (
+              <div>
+                <h4 className="font-semibold mb-3">⚠️ Flags</h4>
+                <div className="flex flex-wrap gap-2">
+                  {result.flags.map((flag, idx) => (
+                    <span key={idx} className="px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm">
+                      {flag.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )} */}
+
             {/* Technical Details */}
             {result.details && (
               <div>
@@ -262,31 +257,10 @@ export default function App() {
         </div>
       </div>
 
-      {/* CSV Upload Section */}
-      <div className="mb-4 p-4 bg-blue-50 border-2 border-blue-200 rounded-lg">
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="font-semibold text-black">📁 Import from CSV</h3>
-        </div>
-        <div className="flex items-center gap-4">
-          <label className="cursor-pointer">
-            <input
-              type="file"
-              accept=".csv"
-              onChange={handleFileUpload}
-              className="hidden"
-            />
-            <div className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-              Choose CSV File
-            </div>
-          </label>
-          <p className="text-sm text-gray-600">Upload a CSV file and select the email column</p>
-        </div>
-      </div>
-
       <textarea
         className="w-full p-4 border-2 text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         rows={6}
-        placeholder="Paste your emails separated by comma, space, or new lines&#10;Example:&#10;user@gmail.com&#10;test@example.com&#10;invalid-email@nonexistent.com&#10;&#10;Or upload a CSV file above"
+        placeholder="Paste your emails separated by comma, space, or new lines&#10;Example:&#10;user@gmail.com&#10;test@example.com&#10;invalid-email@nonexistent.com"
         value={emails}
         onChange={(e) => setEmails(e.target.value)}
       />
@@ -305,40 +279,6 @@ export default function App() {
           "Validate Emails"
         )}
       </button>
-
-      {/* Column Selector Modal */}
-      {showColumnSelector && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl max-w-2xl w-full p-6">
-            <h3 className="text-xl font-bold text-black mb-4">Select Email Column</h3>
-            <p className="text-gray-600 mb-4">Choose which column contains the email addresses:</p>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 max-h-96 overflow-y-auto">
-              {csvHeaders.map((header, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleColumnSelect(header)}
-                  className="p-4 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition text-left"
-                >
-                  <div className="font-semibold text-black mb-1">{header}</div>
-                  <div className="text-xs text-gray-500 truncate">
-                    Sample: {csvData[0]?.[header] || 'N/A'}
-                  </div>
-                </button>
-              ))}
-            </div>
-            <button
-              onClick={() => {
-                setShowColumnSelector(false);
-                setCsvHeaders([]);
-                setCsvData([]);
-              }}
-              className="mt-4 w-full py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
 
       {/* Error Display */}
       {results?.error && (
@@ -408,6 +348,14 @@ export default function App() {
                   <tr key={index} className="hover:bg-gray-50">
                     <td className="border border-gray-200 p-3">
                       <div className="font-mono text-sm break-all text-black">{result.email}</div>
+                      {/* Suggestions indicator */}
+                      {/* {result.suggestions && result.suggestions.length > 0 && (
+                        <div className="text-xs text-yellow-600 mt-1">💡 Has suggestions</div>
+                      )} */}
+                      {/* Flags indicator */}
+                      {/* {result.flags && result.flags.length > 0 && (
+                        <div className="text-xs text-orange-600 mt-1">⚠️ Has flags</div>
+                      )} */}
                     </td>
                     <td className="border border-gray-200 p-3 text-black text-center">
                       <span className={`font-medium ${getStatusColor(result.valid, result.confidence)}`}>
