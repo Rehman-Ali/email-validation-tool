@@ -15,6 +15,7 @@
     "email-verify": "^0.2.1",
     "fast-levenshtein": "^3.0.0",
     "isemail": "^3.2.0",
+    "lucide-react": "^0.554.0",
     "net": "^1.0.2",
     "next": "15.5.3",
     "punycode": "^2.3.1",
